@@ -27,16 +27,18 @@ std::map<unsigned int, std::vector<std::pair<int, int>>> convertFormat(Mat &labe
     return groups;
 }
 
-void printSolution(std::map<unsigned int, std::vector<std::pair<int, int>>> &groups){
+void printSolution(std::map<unsigned int, std::vector<std::pair<int, int>>> &groups, std::streambuf *out){
+    std::ostream o(out);
+
     for (auto &group : groups){
         if(group.second.size() == 1){
             continue;
         }
-        std::cout << "[";
+        o << "[";
         for(std::vector<std::pair<int, int>>::iterator it = group.second.begin(); it != group.second.end(); ++it){
-            std::cout << "[" << it->first << ", " << it->second << "], ";
+            o << "[" << it->first << ", " << it->second << "], ";
         }
-        std::cout << "\b\b]" << std::endl;
+        o << "\b\b]" << std::endl;
     }
 }
 
@@ -62,7 +64,6 @@ std::map<unsigned int, std::vector<std::pair<int, int>>> opencvSolver(std::vecto
     std::map<unsigned int, std::vector<std::pair<int, int>>> groups = convertFormat(cclLabels);
 
     std::cout << "Grouping done" << std::endl;
-    auto end = std::chrono::system_clock::now();
 
     return groups;
 }

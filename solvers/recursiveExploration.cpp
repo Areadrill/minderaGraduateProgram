@@ -3,13 +3,14 @@
 typedef std::pair<uint32_t, uint32_t> coord;
 typedef std::vector<coord> coordVector;
 
-void printSolution(std::vector<coordVector> &groups){
+void printSolution(std::vector<coordVector> &groups, std::streambuf *out){
+    std::ostream o(out);
     for (std::vector<coordVector>::iterator it = groups.begin() ; it != groups.end(); ++it){
-        std::cout << "[";
+        o << "[";
         for (coordVector::iterator jt = it->begin(); jt != it->end(); ++jt){
-            std::cout << "[" << jt->first << ", " << jt->second << "],";
+            o << "[" << jt->first << ", " << jt->second << "],";
         }
-        std::cout << "\b]" << std::endl;
+        o << "\b]" << std::endl;
     }
 }
 
