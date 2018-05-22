@@ -11,15 +11,22 @@ void printTime(std::chrono::duration<double> &secs, std::streambuf *out){
     o << "Answer in: " << secs.count() << std::endl;
 }
 
+std::string readFile(char *filename){
+    std::ifstream in(filename);
+    if(in.good()){
+        std::stringstream s;
+	    s << in.rdbuf();
+        return s.str();
+    }
+	return "";
+}
+
+
 int main(int argc, char **argv){
     if(argc == 1){
         printUsage(argv[0]);
         exit(-1);
     }
-
-    std::ifstream in(argv[1]);
-	std::stringstream s;
-	s << in.rdbuf();
 
     std::vector<std::string> args;
     args.assign(argv + 1, argv + argc);
@@ -38,7 +45,8 @@ int main(int argc, char **argv){
 
     auto start = std::chrono::system_clock::now();
     auto end = std::chrono::system_clock::now();
-    std::vector<std::vector<uint8_t>> matrix = json::parse(s.str());
+
+    std::vector<std::vector<uint8_t>> matrix = json::parse(readFile(argv[1]));
 
     ptrdiff_t solverIndex = std::find(args.begin(), args.end(), "--solver") - args.begin();
     if(solverIndex < args.size() && args[solverIndex + 1] == "opencv"){
