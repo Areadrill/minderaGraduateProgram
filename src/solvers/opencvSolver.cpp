@@ -1,12 +1,8 @@
-#include <opencv2/opencv.hpp>
-#include <vector>
+#include "opencvSolver.hpp"
 
-typedef std::pair<uint32_t, uint32_t> coord;
-typedef std::vector<coord> coordVector;
 
-using namespace cv;
-//namespace opencvsolver{
-    std::map<unsigned int, std::vector<std::pair<int, int>>> convertFormat(Mat &labels){
+
+std::map<unsigned int, std::vector<std::pair<int, int>>> convertFormat(Mat &labels){
     cv::Size size = labels.size();
 
     std::map<unsigned int, std::vector<std::pair<int, int>>> groups;
@@ -73,4 +69,3 @@ std::map<unsigned int, std::vector<std::pair<int, int>>> opencvSolver(std::vecto
 
     return groups;
 }
-//}

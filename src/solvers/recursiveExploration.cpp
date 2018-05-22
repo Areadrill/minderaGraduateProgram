@@ -1,7 +1,4 @@
-#include <vector>
-
-typedef std::pair<uint32_t, uint32_t> coord;
-typedef std::vector<coord> coordVector;
+#include "recursiveExploration.hpp"
 
 void printSolution(std::vector<coordVector> &groups, std::streambuf *out){
     std::ostream o(out);

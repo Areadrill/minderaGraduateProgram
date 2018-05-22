@@ -1,13 +1,4 @@
-#include <sstream>
-#include <fstream>
-#include <streambuf>
-#include <vector>
-#include <iostream>
-#include <cstdint>
-#include <chrono>
-#include "json.hpp"
-#include "solvers/recursiveExploration.cpp"
-#include "solvers/opencvSolver.cpp"
+#include "adjCells.hpp"
 
 using json = nlohmann::json;
 
