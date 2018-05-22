@@ -5,8 +5,8 @@ typedef std::pair<uint32_t, uint32_t> coord;
 typedef std::vector<coord> coordVector;
 
 using namespace cv;
-
-std::map<unsigned int, std::vector<std::pair<int, int>>> convertFormat(Mat &labels){
+//namespace opencvsolver{
+    std::map<unsigned int, std::vector<std::pair<int, int>>> convertFormat(Mat &labels){
     cv::Size size = labels.size();
 
     std::map<unsigned int, std::vector<std::pair<int, int>>> groups;
@@ -36,9 +36,15 @@ void printSolution(std::map<unsigned int, std::vector<std::pair<int, int>>> &gro
         }
         o << "[";
         for(std::vector<std::pair<int, int>>::iterator it = group.second.begin(); it != group.second.end(); ++it){
-            o << "[" << it->first << ", " << it->second << "], ";
+            o << "[" << it->first << ", " << it->second << "]";
         }
-        o << "\b\b]" << std::endl;
+        if(out == std::cout.rdbuf()){
+            o << "\b]" << std::endl;
+        }
+        else{
+            o.seekp(-1, std::ios::cur);
+            o << "]" << std::endl;
+        }
     }
 }
 
@@ -67,3 +73,4 @@ std::map<unsigned int, std::vector<std::pair<int, int>>> opencvSolver(std::vecto
 
     return groups;
 }
+//}

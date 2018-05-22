@@ -10,7 +10,13 @@ void printSolution(std::vector<coordVector> &groups, std::streambuf *out){
         for (coordVector::iterator jt = it->begin(); jt != it->end(); ++jt){
             o << "[" << jt->first << ", " << jt->second << "],";
         }
-        o << "\b]" << std::endl;
+        if(out == std::cout.rdbuf()){
+            o << "\b]" << std::endl;
+        }
+        else{
+            o.seekp(-1, std::ios::cur);
+            o << "]" << std::endl;
+        }
     }
 }
 

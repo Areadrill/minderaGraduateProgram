@@ -12,7 +12,7 @@
 using json = nlohmann::json;
 
 void printUsage(std::string prog){
-    std::cerr << "Usage: " << prog << " <path to file> [--out <path to file>|--notime]";
+    std::cerr << "Usage: " << prog << " <path to file> [--solver <solver name>|--out <path to file>|--notime]";
 }
 
 void printTime(std::chrono::duration<double> &secs, std::streambuf *out){
@@ -46,14 +46,20 @@ int main(int argc, char **argv){
     }
 
     auto start = std::chrono::system_clock::now();
-    
+    auto end = std::chrono::system_clock::now();
     std::vector<std::vector<uint8_t>> matrix = json::parse(s.str());
 
-    auto groups = opencvSolver(matrix);
-
-    auto end = std::chrono::system_clock::now();
- 
-    printSolution(groups, output);
+    ptrdiff_t solverIndex = std::find(args.begin(), args.end(), "--solver") - args.begin();
+    if(solverIndex < args.size() && args[solverIndex + 1] == "opencv"){
+        std::map<unsigned int, std::vector<std::pair<int, int>>> groups = opencvSolver(matrix);
+        end = std::chrono::system_clock::now();
+        printSolution(groups, output);
+    }
+    else{
+        std::vector<coordVector> groups = recursiveExploration(matrix);
+        end = std::chrono::system_clock::now();
+        printSolution(groups, output);
+    }
 
     if(std::find(args.begin(), args.end(), "--notime") == args.end()){
         std::chrono::duration<double> elapsed_seconds = end-start;
