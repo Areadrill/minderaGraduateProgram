@@ -52,20 +52,13 @@ std::map<unsigned int, coordVector> opencvSolver(std::vector<std::vector<uint8_t
         matted.push_back(Sample);
     }
 
-    std::cout << "Mat'ing done"<< std::endl;
-
     threshold(matted, dst, 0.5, 255, THRESH_BINARY);
     matted.release();
-    std::cout << "Thesholding done"<< std::endl;
 
     connectedComponents(dst, cclLabels, 4);
     dst.release();
 
-    std::cout << "CCL done"<< std::endl;
-
     std::map<unsigned int, coordVector> groups = convertFormat(cclLabels);
-
-    std::cout << "Grouping done" << std::endl;
 
     return groups;
 }
