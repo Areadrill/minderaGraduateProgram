@@ -2,20 +2,20 @@
 
 
 
-std::map<unsigned int, std::vector<std::pair<int, int>>> convertFormat(Mat &labels){
+std::map<unsigned int, coordVector> convertFormat(Mat &labels){
     cv::Size size = labels.size();
 
-    std::map<unsigned int, std::vector<std::pair<int, int>>> groups;
+    std::map<unsigned int, coordVector> groups;
     
     for (int x = 0; x < size.height; x++) {
        for (int y = 0; y < size.width; y++) {
             if(labels.at<int>(x,y) != 0){
                 if(groups.find(labels.at<int>(x,y)) == groups.end()){
-                    groups[labels.at<int>(x,y)] = std::vector<std::pair<int, int>>();
-                    groups[labels.at<int>(x,y)].push_back(std::pair<int, int>(x, y));
+                    groups[labels.at<int>(x,y)] = coordVector();
+                    groups[labels.at<int>(x,y)].push_back(coord(x, y));
                 }
                 else{
-                    groups[labels.at<int>(x,y)].push_back(std::pair<int, int>(x, y));
+                    groups[labels.at<int>(x,y)].push_back(coord(x, y));
                 }
             }
         }
@@ -23,7 +23,7 @@ std::map<unsigned int, std::vector<std::pair<int, int>>> convertFormat(Mat &labe
     return groups;
 }
 
-void printSolution(std::map<unsigned int, std::vector<std::pair<int, int>>> &groups, std::streambuf *out){
+void printSolution(std::map<unsigned int, coordVector> &groups, std::streambuf *out){
     std::ostream o(out);
 
     for (auto &group : groups){
@@ -31,8 +31,8 @@ void printSolution(std::map<unsigned int, std::vector<std::pair<int, int>>> &gro
             continue;
         }
         o << "[";
-        for(std::vector<std::pair<int, int>>::iterator it = group.second.begin(); it != group.second.end(); ++it){
-            o << "[" << it->first << ", " << it->second << "]";
+        for(coordVector::iterator it = group.second.begin(); it != group.second.end(); ++it){
+            o << "[" << it->first << ", " << it->second << "],";
         }
         if(out == std::cout.rdbuf()){
             o << "\b]" << std::endl;
@@ -44,7 +44,7 @@ void printSolution(std::map<unsigned int, std::vector<std::pair<int, int>>> &gro
     }
 }
 
-std::map<unsigned int, std::vector<std::pair<int, int>>> opencvSolver(std::vector<std::vector<uint8_t>> &matrix){
+std::map<unsigned int, coordVector> opencvSolver(std::vector<std::vector<uint8_t>> &matrix){
     cv::Mat matted(0, matrix[0].size(), DataType<uint8_t>::type), dst, cclLabels;
 
     for (unsigned int i = 0; i < matrix.size(); ++i){
@@ -63,7 +63,7 @@ std::map<unsigned int, std::vector<std::pair<int, int>>> opencvSolver(std::vecto
 
     std::cout << "CCL done"<< std::endl;
 
-    std::map<unsigned int, std::vector<std::pair<int, int>>> groups = convertFormat(cclLabels);
+    std::map<unsigned int, coordVector> groups = convertFormat(cclLabels);
 
     std::cout << "Grouping done" << std::endl;
 
